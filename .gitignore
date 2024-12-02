@@ -7,7 +7,7 @@
 # *.db
 *.pdf
 *.pkl
-*.md
+# *.md
 *.gguf
 *.faiss
 *.index
