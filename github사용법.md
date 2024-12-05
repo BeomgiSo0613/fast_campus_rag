@@ -6,7 +6,11 @@ git clone ssh
 
 
 ```
-git remote set-url ssh
+# 새로운 origin 추가
+git remote add origin
+
+
+git remote set-url origin ssh
 ```
 ## git Brunch
 1. 브런츠란?
@@ -91,3 +95,37 @@ git remote set-url ssh
 6. 브랜치 관리 팁
 - 브랜치를 활용하면 팀 프로젝트에서 충돌을 방지하고 개별 작업을 깔끔하게 정리할 수 있습니다.
 - 브랜치 이름은 작업 내용이 명확하게 드러나도록 작성하는 것이 좋습니다. 예: feature/회원가입 또는 bugfix/로그인-에러.
+
+
+## git ignore
+
+- '#'로 시작하는 라인은 무시한다.
+- 표준 Glob 패턴을 사용한다.
+- 슬래시(/)로 시작하면 하위 디렉터리에 적용되지(recursivity) 않는다.
+- 디렉터리는 슬래시(/)를 끝에 사용하는 것으로 표현한다.
+- 느낌표(!)로 시작하는 패턴의 파일은 무시하지 않는다.
+
+```
+# ignore all .class files
+*.class
+
+# exclude lib.class from "*.class", meaning all lib.class are still tracked
+!lib.class
+
+# ignore all json files whose name begin with 'temp-'
+temp-*.json
+
+# only ignore the build.log file in current directory, not those in its subdirectories
+/build.log
+
+# specify a folder with slash in the end
+# ignore all files in any directory named temp
+temp/
+
+# ignore doc/notes.txt, but not doc/server/arch.txt
+bin/*.txt
+
+# ignore all .pdf files in the doc/ directory and any of its subdirectories
+# /** matches 0 or more directories
+doc/**/*.pdf
+```
