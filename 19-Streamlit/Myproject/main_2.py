@@ -4,6 +4,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
+from langchain import hub
+from langchain_teddynote.prompts import load_prompt
+
 
 # API KEY 정보로드
 load_dotenv()
@@ -11,20 +14,33 @@ load_dotenv()
 def add_message(role, message):
     st.session_state["messages"].append(ChatMessage(role=role, content=message))
 
-def create_chain():
+def create_chain(prompt_type):
     # 프롬프트
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", "당신은 친절한 AI 어시스턴트입니다."),
             ("user", "#Question:\n{question}"),
         ]
-    )
+    )    
+
+    if prompt_type == "SNS 게시글":
+        prompt = load_prompt("prompts/sns.yaml", encoding="utf-8")
+        
+    elif prompt_type == "요약":
+# set the LANGCHAIN_API_KEY environment variable (create key in settings)
+
+        prompt = hub.pull("teddynote/chain-of-density-map-korean:ae651deb")
+        
+    ##
+
     # GPT
     llm = ChatOpenAI(model_name="gpt-4", temperature=0)
     # 출력 파서
     output_parser = StrOutputParser()
     # 체인 생성
     chain = prompt | llm | output_parser
+    
+    
     return chain
 
 def print_messages():
@@ -41,6 +57,12 @@ with st.sidebar:
     if clear_btn:
 #        st.write("대화가 초기화되었습니다.")
         st.session_state["messages"] = []
+        
+    selected_prompt = st.selectbox(
+        "프롬프트를 선택해 주세요",
+        ("기본모드","SNS 게시글","요약"),
+        index = 0
+    )
 
 # 채팅 입력 창
 
@@ -57,11 +79,11 @@ if user_input:
     st.chat_message("user").write(user_input)
 
     # chain 설정
-    chain = create_chain()
+    # 적절한 프롬프트를 넣어주어야한다.
+    chain = create_chain(selected_prompt)
 
-    # AI 답변 생성
-    #ai_answer = chain.invoke({"question": user_input})
 
+    # 스트리밍
     # 답변을 조금더 빠르게 하려면
     response = chain.stream({"question" :  user_input})
     with st.chat_message("assistant"):
