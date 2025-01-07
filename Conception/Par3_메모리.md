@@ -819,4 +819,3 @@ conversation_chain.memory.load_memory_variables({})["chat_history"]
 이 노트북에서는 `SQLAlchemy`가 지원하는 모든 데이터베이스에 채팅 기록을 저장할 수 있는 `SQLChatMessageHistory` 클래스에 대해 설명합니다.
 
 `SQLite` 이외의 데이터베이스와 함께 사용하려면 해당 데이터베이스 드라이버를 설치해야 합니다.
-ß
